@@ -1,2 +1,1 @@
-# 2048
-machine learning with the game 2048
+evolutionary machine learning with the game 2048.
