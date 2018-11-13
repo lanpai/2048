@@ -1,0 +1,88 @@
+﻿<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.2.3/math.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="neuralnet.js"></script>
+    <script src="2048.js"></script>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col">
+            <div class="container">
+                <div class="heading">
+                    <h1 class="title">2048</h1>
+                    <div class="score-container">0</div>
+                </div>
+
+                <div class="game-container">
+                    <div class="game-message">
+                        <p></p>
+                    </div>
+
+                    <div class="grid-container">
+                        <div class="grid-row">
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                        </div>
+                        <div class="grid-row">
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                        </div>
+                        <div class="grid-row">
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                        </div>
+                        <div class="grid-row">
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                            <div class="grid-cell"></div>
+                        </div>
+                    </div>
+
+                    <div class="tile-container">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="container">
+                <div class="heading">
+                    <hr />
+                    <b>Generation Highscore: <span class="highscore-gen">0</span></b><br />
+					<b>Generation Highest Diversity <span class="diversity-gen">0</span></b><br />
+                    <b>Longest Life: <span class="highestTurn-gen">0</span> turns</b><br />
+                    <br />
+                    <b>Generation: <span class="num-generation">1</span></b><br />
+                    <b>Network: <span class="num-network">1</span></b><br />
+                    <br />
+                    <a class="start-toggle">Start Continuous</a><br />
+                    <a class="interval" interval="500">500ms intervals</a><br />
+                    <a class="interval" interval="250">250ms intervals</a><br />
+                    <a class="interval" interval="100">100ms intervals</a><br />
+                    <a class="interval" interval="10">10ms intervals</a><br />
+                    <a class="interval" interval="5">5ms intervals</a>
+					<hr />
+					<a class="save">Save</a><br />
+					<a class="load">Load</a><br />
+					<br />
+					<textarea class="save-data" rows=1 style="font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;font-size: 18px; color: #776E65; border-color: #776E65; min-width: 100%; max-width: 100%; background-color: rgba(0, 0, 0, 0);"></textarea>
+                    <hr />
+                    <canvas id="growth-chart"></canvas>
+					<canvas id="diversity-chart"></canvas>
+					<canvas id="moves-chart"></canvas>
+                    <p class="move-history" style="word-break: break-all;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
