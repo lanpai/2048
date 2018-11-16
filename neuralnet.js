@@ -186,7 +186,7 @@ NeuralNet.prototype.listen = function () {
                 for (var i = 0; i < self.maxNetworks; i++) {
                     self.generation[self.generation.length - 1].networks.push({ layers: [], score: 0 });
 
-                    const layerCounts = [0, 24, 12, 5, 4];
+                    const layerCounts = [0, 22, 5, 4];
                     for (var j = 1; j < layerCounts.length; j++) {
                         self.generation[self.generation.length - 1].networks[i].layers[j - 1] = [];
                         for (var k = 0; k < layerCounts[j]; k++) {
@@ -220,14 +220,14 @@ NeuralNet.prototype.listen = function () {
                     input.push(self.grid[i][j] ? Math.log(self.grid[i][j].value) / Math.log(2) : 0);
                 }
             }
-            //for (var i = 0; i < 6; i++)
-                //input.push(moves[i] ? moves[i] : -1);
+            for (var i = 0; i < 6; i++)
+                input.push(moves[i] ? moves[i] : -1);
 			//input.push(turns);
-            var history = [0, 0, 0, 0, 0, 0, 0, 0];
+            /*var history = [0, 0, 0, 0, 0, 0, 0, 0];
             for (var i = 0; i < 8; i++)
                 if (moves[i] && i == moves[Math.floor(i / 4)])
                     history[i] = 1;
-            input.push(history);
+            input.push(history);*/
             self.forwProp(input);
             var largest = 0;
             for (var j = 0; j < self.generation[self.generation.length - 1].networks[self.currentNetwork].layers[self.generation[self.generation.length - 1].networks[self.currentNetwork].layers.length - 1].length; j++) {
