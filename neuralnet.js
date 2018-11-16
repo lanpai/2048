@@ -16,7 +16,7 @@
 function NeuralNet() {
     this.events = {};
     this.start = false;
-    this.speed = 500;
+    this.speed = 5;
 
     this.score = 0;
 
@@ -186,7 +186,7 @@ NeuralNet.prototype.listen = function () {
                 for (var i = 0; i < self.maxNetworks; i++) {
                     self.generation[self.generation.length - 1].networks.push({ layers: [], score: 0 });
 
-                    const layerCounts = [0, 22, 4, 4];
+                    const layerCounts = [0, 24, 12, 5, 4];
                     for (var j = 1; j < layerCounts.length; j++) {
                         self.generation[self.generation.length - 1].networks[i].layers[j - 1] = [];
                         for (var k = 0; k < layerCounts[j]; k++) {
@@ -220,14 +220,19 @@ NeuralNet.prototype.listen = function () {
                     input.push(self.grid[i][j] ? Math.log(self.grid[i][j].value) / Math.log(2) : 0);
                 }
             }
-            for (var i = 0; i < 6; i++)
-                input.push(moves[i] ? moves[i] : -1);
+            //for (var i = 0; i < 6; i++)
+                //input.push(moves[i] ? moves[i] : -1);
 			//input.push(turns);
+            var history = [0, 0, 0, 0, 0, 0, 0, 0];
+            for (var i = 0; i < 8; i++)
+                if (moves[i] && i == moves[Math.floor(i / 4)])
+                    history[i] = 1;
+            input.push(history);
             self.forwProp(input);
             var largest = 0;
             for (var j = 0; j < self.generation[self.generation.length - 1].networks[self.currentNetwork].layers[self.generation[self.generation.length - 1].networks[self.currentNetwork].layers.length - 1].length; j++) {
-                if (Math.abs(self.generation[self.generation.length - 1].networks[self.currentNetwork].layers[self.generation[self.generation.length - 1].networks[self.currentNetwork].layers.length - 1][j].value) >
-                    Math.abs(self.generation[self.generation.length - 1].networks[self.currentNetwork].layers[self.generation[self.generation.length - 1].networks[self.currentNetwork].layers.length - 1][largest].value))
+                if ((self.generation[self.generation.length - 1].networks[self.currentNetwork].layers[self.generation[self.generation.length - 1].networks[self.currentNetwork].layers.length - 1][j].value) >
+                    (self.generation[self.generation.length - 1].networks[self.currentNetwork].layers[self.generation[self.generation.length - 1].networks[self.currentNetwork].layers.length - 1][largest].value))
                     largest = j;
             }
 
@@ -269,12 +274,13 @@ NeuralNet.prototype.listen = function () {
 				}
 				avgMove /= moveCount.length;
 				
-				var sum = 0;
+				/*var sum = 0;
 				for (var i = 0; i < moveCount.length; i++) {
 					sum += Math.pow(moveCount[i] - avgMove, 2);
-				}
-				var deviation = sum / moveCount.length;
-				var bell = Math.pow(Math.E, deviation / (-0.5 * (turns + 1)));
+				}*/
+				//var deviation = sum / moveCount.length;
+				var deviation = math.std(moveCount);
+                var bell = 4 * Math.pow(Math.E, deviation / (-0.15 * (turns + 1)));
 				
 				//console.log(moveCount, avgMove, sum, bell, (turns + 1));
 				
@@ -283,7 +289,7 @@ NeuralNet.prototype.listen = function () {
 				divHigh = Math.max(bell, divHigh);
 				document.getElementsByClassName("diversity-gen")[0].textContent = divHigh;
 
-                var score = (self.score * (1 + Math.sqrt(sumChange)) * bell);// / turns;
+                var score = ((self.score / turns) * (1 + Math.sqrt(sumChange)) * bell);
                 self.generation[self.generation.length - 1].networks[self.currentNetwork].score = score;
                 self.currentGenHighest = Math.max(score, self.currentGenHighest);
                 self.currentNetwork++;
@@ -331,7 +337,10 @@ NeuralNet.prototype.listen = function () {
 					chartDiv.data.datasets[1].data.push(divMean);
 					chartDiv.data.datasets[2].data.push(divLow);
 					chartDiv.update();
-					
+					divHigh = 0;
+                    divMean = 0;
+                    divLow = 0;
+
 					chartMoves.data.datasets[0].data.push(totalMoveCount[0]);
 					chartMoves.data.datasets[1].data.push(totalMoveCount[1]);
 					chartMoves.data.datasets[2].data.push(totalMoveCount[2]);
